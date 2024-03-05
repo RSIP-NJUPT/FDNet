@@ -12,7 +12,7 @@ import os
 
 import argparse
 import logging
-from models.FDNet import FDNet
+from models.FDNet import MFFT
 from utils import (trPixel2Patch, tsPixel2Patch, set_seed,
                    output_metric, train_epoch, valid_epoch, draw_classification_map)
 
@@ -35,16 +35,16 @@ parser.add_argument('--flag', choices=['train', 'test'], default='test',
                     help='testing mark')
 parser.add_argument('--patch_size', type=int, default=8,
                     help='cnn input size')
-parser.add_argument('--wavename', type=str, default='db2',
-                    help='type of wavelet')
+parser.add_argument('--wavename', type=str, choices=['bior2.2', 'db2', 'db4', 'db6'], default='db2',
+                    help='type of wave')
 parser.add_argument('--attn_kernel_size', type=int, default=9,
                     help='')
 parser.add_argument('--coefficient_hsi', type=float, default=0.7,
                     help='weight of HSI data in feature fusion')
-parser.add_argument('--fae_embed_dim', type=int, default=64,
-                    help='number of channels in fae input data')
-parser.add_argument('--fae_depth', type=int, default=1,
-                    help='depth of fae')
+parser.add_argument('--vit_embed_dim', type=int, default=64,
+                    help='number of channels in vit input data')
+parser.add_argument('--vit_depth', type=int, default=1,
+                    help='depth of vit')
 
 args = parser.parse_args()
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_id)
@@ -132,9 +132,9 @@ def train1time():
     logger.info("lidar_height={0},lidar_width={1},lidar_band={2}".format(height2, width2, band2))
     # -------------------------------------------------------------------------------
     # create model
-    model = FDNet(l1=band1, l2=band2, patch_size=args.patch_size, num_classes=num_classes,
-                  wavename=args.wavename, attn_kernel_size=args.attn_kernel_size, coefficient_hsi=args.coefficient_hsi,
-                  fae_embed_dim=args.fae_embed_dim, fae_depth=args.fae_depth)
+    model = MFFT(l1=band1, l2=band2, patch_size=args.patch_size, num_classes=num_classes,
+                 wavename=args.wavename, attn_kernel_size=args.attn_kernel_size, coefficient_hsi=args.coefficient_hsi,
+                 vit_embed_dim=args.vit_embed_dim, deform_vit_depth=args.vit_depth)
 
     model = model.cuda()
     criterion = nn.CrossEntropyLoss().cuda()
