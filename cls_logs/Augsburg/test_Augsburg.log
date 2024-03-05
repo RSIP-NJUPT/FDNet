@@ -1,1 +1,14 @@
+2024-02-02 15:35:52,768 - Trainlog - INFO - 
 
+2024-02-02 15:35:52,768 - Trainlog - INFO - ==================================================
+2024-02-02 15:35:52,768 - Trainlog - INFO - ==================================================
+2024-02-02 15:35:52,768 - Trainlog - INFO - hsi_height=332,hsi_width=485,hsi_band=180
+2024-02-02 15:35:52,768 - Trainlog - INFO - lidar_height=332,lidar_width=485,lidar_band=1
+2024-02-02 15:36:01,187 - Trainlog - INFO - Test records:
+2024-02-02 15:36:01,187 - Trainlog - INFO - Maximal Accuracy: 0.822965
+2024-02-02 15:36:01,187 - Trainlog - INFO - OA: 0.8230 | AA: 0.7474 | Kappa: 0.7600
+2024-02-02 15:36:01,187 - Trainlog - INFO - [0.98116705 0.78263882 0.52597233 0.85385848 0.82342342 0.58707692
+ 0.67748344]
+2024-02-02 15:36:01,187 - Trainlog - INFO - Testing Time: 8.34
+2024-02-02 15:36:01,187 - Trainlog - INFO - Parameter:
+2024-02-02 15:36:01,187 - Trainlog - INFO - {'gpu_id': '0', 'seed': 0, 'batch_size': 64, 'epochs': 500, 'dataset': 'Augsburg', 'learning_rate': 0.001, 'flag': 'test', 'patch_size': 8, 'wavename': 'db2', 'attn_kernel_size': 9, 'coefficient_hsi': 0.7, 'vit_embed_dim': 64, 'fft_depth': 1}
