@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
 
-from models.FAE import FAE
+from models.Deformformer import Deformformer
 from models.DWT_2D import DWT_2D
 from models.DWT_3D import DWT_3D
 
@@ -15,7 +15,7 @@ def seq2img(x):
     return x
 
 
-def frequency_embedding(c, h, w):
+def frequency_position_embedding(c, h, w):
     position_embedding = torch.zeros(1, c, h * w)
     for j in range(h * w):
         for k in range(c):
@@ -23,9 +23,9 @@ def frequency_embedding(c, h, w):
     return nn.Parameter(position_embedding)
 
 
-class Spatial_Attn_2d(nn.Module):
+class Spatial_Attn(nn.Module):
     def __init__(self, kernel_size=7):
-        super(Spatial_Attn_2d, self).__init__()
+        super(Spatial_Attn, self).__init__()
         self.attn = nn.Sequential(
             nn.Conv2d(in_channels=2, out_channels=1, kernel_size=kernel_size, stride=1, padding=kernel_size // 2),
             nn.BatchNorm2d(1),
@@ -39,9 +39,9 @@ class Spatial_Attn_2d(nn.Module):
         return x * y.expand_as(x)
 
 
-class Spatial_Spectral_Attn_3d(nn.Module):
+class Spatial_Spectral_Attn(nn.Module):
     def __init__(self, kernel_size=7):
-        super(Spatial_Spectral_Attn_3d, self).__init__()
+        super(Spatial_Spectral_Attn, self).__init__()
         self.attn = nn.Sequential(
             nn.Conv3d(in_channels=2, out_channels=1, kernel_size=kernel_size, stride=1, padding=kernel_size // 2),
             nn.BatchNorm3d(1),
@@ -73,7 +73,7 @@ class LiDAR_Encoder(nn.Module):
             nn.ReLU(),
         )
 
-        self.S_attn = Spatial_Attn_2d(kernel_size=attn_kernel_size)
+        self.S_attn = Spatial_Attn(kernel_size=attn_kernel_size)
 
         # 2d cnn for high components
         self.conv_high = nn.Sequential(
@@ -132,7 +132,7 @@ class HSI_Encoder_3D(nn.Module):
             nn.ReLU(),
         )
 
-        self.SS_attn = Spatial_Spectral_Attn_3d(kernel_size=attn_kernel_size)
+        self.SS_attn = Spatial_Spectral_Attn(kernel_size=attn_kernel_size)
 
         # 3d cnn for high components
         self.conv3d_high = nn.Sequential(
@@ -200,7 +200,7 @@ class HSI_Encoder_2D(nn.Module):
             nn.ReLU(),
         )
 
-        self.S_attn = Spatial_Attn_2d(kernel_size=attn_kernel_size)
+        self.S_attn = Spatial_Attn(kernel_size=attn_kernel_size)
 
         # high frequency components processing
         self.conv_high = nn.Sequential(
@@ -254,27 +254,27 @@ class Classifier(nn.Module):
         return x_out
 
 
-class FDNet(nn.Module):
+class MFFT(nn.Module):
     def __init__(self, l1, l2, patch_size, num_classes,
                  wavename, attn_kernel_size, coefficient_hsi,
-                 fae_embed_dim, fae_depth):
+                 vit_embed_dim, deform_vit_depth):
         super().__init__()
         self.weight_hsi = torch.nn.Parameter(torch.Tensor([coefficient_hsi]))
         self.weight_lidar = torch.nn.Parameter(torch.Tensor([1 - coefficient_hsi]))
 
         self.hsi_encoder_3d = HSI_Encoder_3D(in_depth=l1, patch_size=patch_size,
-                                             wavename=wavename, out_channels_2d=fae_embed_dim,
+                                             wavename=wavename, out_channels_2d=vit_embed_dim,
                                              attn_kernel_size=attn_kernel_size)
-        self.hsi_encoder_2d = HSI_Encoder_2D(wavename=wavename, in_channels=l1, out_channels=fae_embed_dim,
+        self.hsi_encoder_2d = HSI_Encoder_2D(wavename=wavename, in_channels=l1, out_channels=64,
                                              attn_kernel_size=attn_kernel_size)
-        self.lidar_encoder = LiDAR_Encoder(wavename=wavename, in_channels=l2, out_channels=fae_embed_dim,
+        self.lidar_encoder = LiDAR_Encoder(wavename=wavename, in_channels=l2, out_channels=vit_embed_dim,
                                            attn_kernel_size=attn_kernel_size)
 
-        self.pos_embed = nn.Parameter(torch.randn(1, fae_embed_dim, (patch_size // 2) ** 2))
-        self.freq_embed = frequency_embedding(c=fae_embed_dim, h=patch_size // 2, w=patch_size // 2)
-        self.fae = FAE(in_channels=fae_embed_dim, patch_size=patch_size // 2, depth=fae_depth)
+        self.pos_embed = nn.Parameter(torch.randn(1, vit_embed_dim, (patch_size // 2) ** 2))
+        self.freq_pos_embed = frequency_position_embedding(c=vit_embed_dim, h=patch_size // 2, w=patch_size // 2)
+        self.deformformer = Deformformer(in_channels=vit_embed_dim, patch_size=patch_size // 2, depth=deform_vit_depth)
 
-        self.classifier = Classifier(Classes=num_classes, cls_embed_dim=fae_embed_dim)
+        self.classifier = Classifier(Classes=num_classes, cls_embed_dim=vit_embed_dim)
 
     def forward(self, img_hsi, img_lidar):
         # lidar encoder
@@ -284,13 +284,14 @@ class FDNet(nn.Module):
         x_hsi_3d = self.hsi_encoder_3d(img_hsi)
         x_hsi_2d = self.hsi_encoder_2d(img_hsi)
         x_hsi = x_hsi_3d + x_hsi_2d
-
         x_cnn = self.weight_hsi * x_hsi + self.weight_lidar * x_lidar
+
+        # vit
         x = x_cnn.flatten(2)
         x = x + self.pos_embed[:, :, :]
-        x = x + self.freq_embed[:, :, :]
+        x = x + self.freq_pos_embed[:, :, :]
         x = seq2img(x)
-        x_vit = self.fae(x)
+        x_vit = self.deformformer(x)
 
         x_cls = self.classifier(x_vit)
         return x_cls
