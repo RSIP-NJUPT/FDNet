@@ -1,7 +1,3 @@
-"""
-自定义 pytorch 层，实现一维、二维、三维张量的 DWT 和 IDWT，未考虑边界延拓
-只有当图像行列数都是偶数，且重构滤波器组低频分量长度为 2 时，才能精确重构，否则在边界处有误差。
-"""
 import torch
 import numpy as np
 import math
@@ -24,10 +20,6 @@ class DWT_3D(Module):
     """
 
     def __init__(self, wavename):
-        """
-        3D discrete wavelet transform (DWT) for 3D data decomposition
-        :param wavename: pywt.wavelist(); in the paper, 'chx.y' denotes 'biorx.y'.
-        """
         super(DWT_3D, self).__init__()
         wavelet = pywt.Wavelet(wavename)
         self.band_low = wavelet.rec_lo
@@ -38,11 +30,6 @@ class DWT_3D(Module):
         self.band_length_half = math.floor(self.band_length / 2)
 
     def get_matrix(self):
-        """
-        生成变换矩阵
-        generating the matrices: \mathcal{L}, \mathcal{H}
-        :return: self.matrix_low = \mathcal{L}, self.matrix_high = \mathcal{H}
-        """
         L1 = np.max((self.input_height, self.input_width))
         L = math.floor(L1 / 2)
         matrix_h = np.zeros((L, L1 + self.band_length - 2))
@@ -151,11 +138,3 @@ class DWTFunction_3D(Function):
         grad_H = torch.add(torch.matmul(grad_HL, matrix_Low_1.t()), torch.matmul(grad_HH, matrix_High_1.t()))
         grad_input = torch.add(torch.matmul(matrix_Low_0.t(), grad_L), torch.matmul(matrix_High_0.t(), grad_H))
         return grad_input, None, None, None, None, None, None, None, None
-
-
-# a = torch.ones(2, 1, 64, 16, 16).cuda()
-# method = DWT_3D('bior2.2')
-# a = method(a.permute(0, 1, 3, 2, 4))
-# a = a.permute(0, 1, 3, 2, 4).contiguous()
-# # a = a.view(2, 1, 8, 32, 8)
-# print(a.shape)
