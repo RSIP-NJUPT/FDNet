@@ -1,1 +1,14 @@
+2024-02-02 15:42:23,931 - Trainlog - INFO - 
 
+2024-02-02 15:42:23,931 - Trainlog - INFO - ==================================================
+2024-02-02 15:42:23,931 - Trainlog - INFO - ==================================================
+2024-02-02 15:42:23,931 - Trainlog - INFO - hsi_height=400,hsi_width=500,hsi_band=30
+2024-02-02 15:42:23,931 - Trainlog - INFO - lidar_height=400,lidar_width=500,lidar_band=1
+2024-02-02 15:42:43,663 - Trainlog - INFO - Test records:
+2024-02-02 15:42:43,664 - Trainlog - INFO - Maximal Accuracy: 0.766515
+2024-02-02 15:42:43,669 - Trainlog - INFO - OA: 0.7665 | AA: 0.8315 | Kappa: 0.7103
+2024-02-02 15:42:43,669 - Trainlog - INFO - [0.98253968 0.71646573 0.81224628 1.         0.88181837 0.68966415
+ 0.73797554 0.94942108 0.71378505]
+2024-02-02 15:42:43,669 - Trainlog - INFO - Testing Time: 19.64
+2024-02-02 15:42:43,669 - Trainlog - INFO - Parameter:
+2024-02-02 15:42:43,669 - Trainlog - INFO - {'gpu_id': '0', 'seed': 0, 'batch_size': 64, 'epochs': 500, 'dataset': 'Dafeng', 'learning_rate': 0.001, 'flag': 'test', 'patch_size': 8, 'wavename': 'db2', 'attn_kernel_size': 9, 'coefficient_hsi': 0.7, 'vit_embed_dim': 64, 'fft_depth': 1}
