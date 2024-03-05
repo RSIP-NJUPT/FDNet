@@ -257,7 +257,7 @@ class Classifier(nn.Module):
 class MFFT(nn.Module):
     def __init__(self, l1, l2, patch_size, num_classes,
                  wavename, attn_kernel_size, coefficient_hsi,
-                 vit_embed_dim, deform_vit_depth):
+                 vit_embed_dim, fft_depth):
         super().__init__()
         self.weight_hsi = torch.nn.Parameter(torch.Tensor([coefficient_hsi]))
         self.weight_lidar = torch.nn.Parameter(torch.Tensor([1 - coefficient_hsi]))
@@ -272,7 +272,7 @@ class MFFT(nn.Module):
 
         self.pos_embed = nn.Parameter(torch.randn(1, vit_embed_dim, (patch_size // 2) ** 2))
         self.freq_pos_embed = frequency_position_embedding(c=vit_embed_dim, h=patch_size // 2, w=patch_size // 2)
-        self.deformformer = Deformformer(in_channels=vit_embed_dim, patch_size=patch_size // 2, depth=deform_vit_depth)
+        self.fftformer = Deformformer(in_channels=vit_embed_dim, patch_size=patch_size // 2, depth=fft_depth)
 
         self.classifier = Classifier(Classes=num_classes, cls_embed_dim=vit_embed_dim)
 
@@ -286,12 +286,12 @@ class MFFT(nn.Module):
         x_hsi = x_hsi_3d + x_hsi_2d
         x_cnn = self.weight_hsi * x_hsi + self.weight_lidar * x_lidar
 
-        # vit
+        # fft
         x = x_cnn.flatten(2)
         x = x + self.pos_embed[:, :, :]
         x = x + self.freq_pos_embed[:, :, :]
         x = seq2img(x)
-        x_vit = self.deformformer(x)
+        x_vit = self.fftformer(x)
 
         x_cls = self.classifier(x_vit)
         return x_cls

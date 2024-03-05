@@ -1,3 +1,7 @@
+"""
+自定义 pytorch 层，实现一维、二维、三维张量的 DWT 和 IDWT，未考虑边界延拓
+只有当图像行列数都是偶数，且重构滤波器组低频分量长度为 2 时，才能精确重构，否则在边界处有误差。
+"""
 import torch
 import numpy as np
 import math
@@ -16,6 +20,10 @@ class DWT_2D(Module):
     """
 
     def __init__(self, wavename):
+        """
+        2D discrete wavelet transform (DWT) for 2D image decomposition
+        :param wavename: pywt.wavelist(); in the paper, 'chx.y' denotes 'biorx.y'.
+        """
         super(DWT_2D, self).__init__()
         wavelet = pywt.Wavelet(wavename)
         self.band_low = wavelet.rec_lo
@@ -26,6 +34,11 @@ class DWT_2D(Module):
         self.band_length_half = math.floor(self.band_length / 2)
 
     def get_matrix(self):
+        """
+        生成变换矩阵
+        generating the matrices: \mathcal{L}, \mathcal{H}
+        :return: self.matrix_low = \mathcal{L}, self.matrix_high = \mathcal{H}
+        """
         L1 = np.max((self.input_height, self.input_width))
         L = math.floor(L1 / 2)
         matrix_h = np.zeros((L, L1 + self.band_length - 2))
