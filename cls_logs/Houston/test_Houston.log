@@ -1,15 +1,15 @@
-2024-02-02 15:33:35,833 - Trainlog - INFO - 
+2024-03-05 18:06:07,656 - Trainlog - INFO - 
 
-2024-02-02 15:33:35,833 - Trainlog - INFO - ==================================================
-2024-02-02 15:33:35,833 - Trainlog - INFO - ==================================================
-2024-02-02 15:33:35,833 - Trainlog - INFO - hsi_height=349,hsi_width=1905,hsi_band=144
-2024-02-02 15:33:35,833 - Trainlog - INFO - lidar_height=349,lidar_width=1905,lidar_band=1
-2024-02-02 15:33:37,660 - Trainlog - INFO - Test records:
-2024-02-02 15:33:37,660 - Trainlog - INFO - Maximal Accuracy: 0.959128
-2024-02-02 15:33:37,660 - Trainlog - INFO - OA: 0.9591 | AA: 0.9613 | Kappa: 0.9558
-2024-02-02 15:33:37,660 - Trainlog - INFO - [0.97319253 0.98784441 0.97488922 0.99836601 1.         0.96393443
+2024-03-05 18:06:07,656 - Trainlog - INFO - ==================================================
+2024-03-05 18:06:07,656 - Trainlog - INFO - ==================================================
+2024-03-05 18:06:07,656 - Trainlog - INFO - hsi_height=349,hsi_width=1905,hsi_band=144
+2024-03-05 18:06:07,656 - Trainlog - INFO - lidar_height=349,lidar_width=1905,lidar_band=1
+2024-03-05 18:06:09,420 - Trainlog - INFO - Test records:
+2024-03-05 18:06:09,420 - Trainlog - INFO - Maximal Accuracy: 0.959128
+2024-03-05 18:06:09,420 - Trainlog - INFO - OA: 0.9591 | AA: 0.9613 | Kappa: 0.9558
+2024-03-05 18:06:09,420 - Trainlog - INFO - [0.97319253 0.98784441 0.97488922 0.99836601 1.         0.96393443
  0.96233974 0.89542484 0.84496753 0.98177299 0.96296296 0.95465787
  0.91982183 1.         1.        ]
-2024-02-02 15:33:37,661 - Trainlog - INFO - Testing Time: 1.73
-2024-02-02 15:33:37,661 - Trainlog - INFO - Parameter:
-2024-02-02 15:33:37,661 - Trainlog - INFO - {'gpu_id': '0', 'seed': 0, 'batch_size': 64, 'epochs': 500, 'dataset': 'Houston', 'learning_rate': 0.001, 'flag': 'test', 'patch_size': 8, 'wavename': 'db2', 'attn_kernel_size': 9, 'coefficient_hsi': 0.7, 'vit_embed_dim': 64, 'fft_depth': 1}
+2024-03-05 18:06:09,420 - Trainlog - INFO - Testing Time: 1.69
+2024-03-05 18:06:09,420 - Trainlog - INFO - Parameter:
+2024-03-05 18:06:09,420 - Trainlog - INFO - {'gpu_id': '0', 'seed': 0, 'batch_size': 64, 'epochs': 500, 'dataset': 'Houston', 'learning_rate': 0.001, 'flag': 'test', 'patch_size': 8, 'wavename': 'db2', 'attn_kernel_size': 9, 'coefficient_hsi': 0.7, 'fae_embed_dim': 64, 'fae_depth': 1}
