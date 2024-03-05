@@ -127,6 +127,9 @@ def trPixel2Patch(Data1, Data2, patchsize, pad_width, TR_Label):
     TrainPatch1 = torch.from_numpy(TrainPatch1)
     TrainPatch2 = torch.from_numpy(TrainPatch2)
 
+    # add dimension for 3D-CNN
+    # TrainPatch1 = TrainPatch1.unsqueeze(1)
+
     TrainLabel = torch.from_numpy(TrainLabel) - 1
     TrainLabel = TrainLabel.long()
     return TrainPatch1, TrainPatch2, TrainLabel
@@ -182,6 +185,9 @@ def tsPixel2Patch(Data1, Data2, patchsize, pad_width, TS_Label):
 
     TestPatch1 = torch.from_numpy(TestPatch1)
     TestPatch2 = torch.from_numpy(TestPatch2)
+
+    # add dimension
+    # TestPatch1 = TestPatch1.unsqueeze(1)
 
     TestLabel = torch.from_numpy(TestLabel) - 1
     TestLabel = TestLabel.long()
@@ -268,6 +274,16 @@ def draw_classification_map(label_matrix, img_path: str, dataset_name: str = 'Ho
             14: (216, 85, 182),  # Tennis court
             15: (216, 85, 129),  # Running track
         }
+    elif dataset_name == 'Trento':
+        color_map = {
+            0: (0, 0, 0),
+            1: (56, 86, 159),  # apple trees
+            2: (81, 204, 237),  # Buildings
+            3: (156, 206, 109),  # Ground
+            4: (251, 209, 26),  # Woods
+            5: (236, 53, 37),  # Vineyard
+            6: (125, 21, 22),  # Roads
+        }
     elif dataset_name == 'Augsburg':
         color_map = {
             0: (0, 0, 0),
@@ -296,15 +312,15 @@ def draw_classification_map(label_matrix, img_path: str, dataset_name: str = 'Ho
         }
     elif dataset_name == 'Dafeng':
         color_map = {
-            1: (59, 132, 70),  # Suaeda glauca
-            2: (0, 204, 204),  # Bare soil
-            3: (146, 82, 52),  # Road
-            4: (218, 50, 43),  # Buildings
-            5: (125, 21, 22),  # Water
-            6: (56, 86, 159),  # Reed
-            7: (251, 209, 26),  # S. alterniflora
-            8: (145, 85, 216),  # Algae
-            9: (81, 204, 237),  # Grass
+            1: (59, 132, 70),  # 碱蓬
+            2: (0, 204, 204),  # 裸土
+            3: (146, 82, 52),  # 道路
+            4: (218, 50, 43),  # 房屋
+            5: (125, 21, 22),  # 水体
+            6: (56, 86, 159),  # 芦苇
+            7: (251, 209, 26),  # 互花米草
+            8: (145, 85, 216),  # 藻类
+            9: (81, 204, 237),  # 草类
         }
     else:
         raise 'datasets name error'

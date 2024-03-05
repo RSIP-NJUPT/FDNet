@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-# @Time       :2023/12/18 20:36 AM
+# @Time       :2024/1/18 20:36 AM
 # @AUTHOR     :Duo Wang
 # @FileName   :demo.py
 import torch
@@ -18,7 +18,7 @@ from utils import (trPixel2Patch, tsPixel2Patch, set_seed,
 
 # -------------------------------------------------------------------------------
 # Parameter Setting
-parser = argparse.ArgumentParser(description="Training for FDNet")
+parser = argparse.ArgumentParser(description="Training for FD-Net")
 parser.add_argument('--gpu_id', default='0',
                     help='gpu id')
 parser.add_argument('--seed', type=int, default=0,
@@ -31,7 +31,7 @@ parser.add_argument('--dataset', choices=['Houston', 'Augsburg', 'Muufl', 'Dafen
                     help='dataset to use')
 parser.add_argument('--learning_rate', type=float, default=0.001,
                     help='learning rate')
-parser.add_argument('--flag', choices=['train', 'test'], default='test',
+parser.add_argument('--flag', choices=['train', 'test'], default='train',
                     help='testing mark')
 parser.add_argument('--patch_size', type=int, default=8,
                     help='cnn input size')
@@ -43,8 +43,8 @@ parser.add_argument('--coefficient_hsi', type=float, default=0.7,
                     help='weight of HSI data in feature fusion')
 parser.add_argument('--vit_embed_dim', type=int, default=64,
                     help='number of channels in vit input data')
-parser.add_argument('--vit_depth', type=int, default=1,
-                    help='depth of vit')
+parser.add_argument('--fft_depth', type=int, default=1,
+                    help='depth of fft')
 
 args = parser.parse_args()
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_id)
@@ -134,7 +134,7 @@ def train1time():
     # create model
     model = MFFT(l1=band1, l2=band2, patch_size=args.patch_size, num_classes=num_classes,
                  wavename=args.wavename, attn_kernel_size=args.attn_kernel_size, coefficient_hsi=args.coefficient_hsi,
-                 vit_embed_dim=args.vit_embed_dim, deform_vit_depth=args.vit_depth)
+                 vit_embed_dim=args.vit_embed_dim, fft_depth=args.fft_depth)
 
     model = model.cuda()
     criterion = nn.CrossEntropyLoss().cuda()
