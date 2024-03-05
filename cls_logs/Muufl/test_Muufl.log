@@ -1,14 +1,14 @@
-2024-02-02 15:40:16,958 - Trainlog - INFO - 
+2024-03-05 18:17:18,686 - Trainlog - INFO - 
 
-2024-02-02 15:40:16,958 - Trainlog - INFO - ==================================================
-2024-02-02 15:40:16,958 - Trainlog - INFO - ==================================================
-2024-02-02 15:40:16,958 - Trainlog - INFO - hsi_height=325,hsi_width=220,hsi_band=64
-2024-02-02 15:40:16,958 - Trainlog - INFO - lidar_height=325,lidar_width=220,lidar_band=1
-2024-02-02 15:40:22,524 - Trainlog - INFO - Test records:
-2024-02-02 15:40:22,524 - Trainlog - INFO - Maximal Accuracy: 0.881174
-2024-02-02 15:40:22,524 - Trainlog - INFO - OA: 0.8812 | AA: 0.8931 | Kappa: 0.8458
-2024-02-02 15:40:22,524 - Trainlog - INFO - [0.90602087 0.8327791  0.754764   0.89014723 0.87943262 1.
+2024-03-05 18:17:18,686 - Trainlog - INFO - ==================================================
+2024-03-05 18:17:18,686 - Trainlog - INFO - ==================================================
+2024-03-05 18:17:18,686 - Trainlog - INFO - hsi_height=325,hsi_width=220,hsi_band=64
+2024-03-05 18:17:18,686 - Trainlog - INFO - lidar_height=325,lidar_width=220,lidar_band=1
+2024-03-05 18:17:24,168 - Trainlog - INFO - Test records:
+2024-03-05 18:17:24,168 - Trainlog - INFO - Maximal Accuracy: 0.881174
+2024-03-05 18:17:24,168 - Trainlog - INFO - OA: 0.8812 | AA: 0.8931 | Kappa: 0.8458
+2024-03-05 18:17:24,168 - Trainlog - INFO - [0.90602087 0.8327791  0.754764   0.89014723 0.87943262 1.
  0.9249885  0.95873786 0.75622642 0.93495935 0.98564593]
-2024-02-02 15:40:22,524 - Trainlog - INFO - Testing Time: 5.48
-2024-02-02 15:40:22,524 - Trainlog - INFO - Parameter:
-2024-02-02 15:40:22,524 - Trainlog - INFO - {'gpu_id': '0', 'seed': 0, 'batch_size': 64, 'epochs': 500, 'dataset': 'Muufl', 'learning_rate': 0.001, 'flag': 'test', 'patch_size': 8, 'wavename': 'db2', 'attn_kernel_size': 9, 'coefficient_hsi': 0.7, 'vit_embed_dim': 64, 'fft_depth': 1}
+2024-03-05 18:17:24,168 - Trainlog - INFO - Testing Time: 5.40
+2024-03-05 18:17:24,168 - Trainlog - INFO - Parameter:
+2024-03-05 18:17:24,168 - Trainlog - INFO - {'gpu_id': '0', 'seed': 0, 'batch_size': 64, 'epochs': 500, 'dataset': 'Muufl', 'learning_rate': 0.001, 'flag': 'test', 'patch_size': 8, 'wavename': 'db2', 'attn_kernel_size': 9, 'coefficient_hsi': 0.7, 'fae_embed_dim': 64, 'fae_depth': 1}
