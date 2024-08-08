@@ -1,5 +1,5 @@
 # FDNet
-This an official Pytorch implementation of our paper ["Hyperspectral and LiDAR Classification via Frequency Domain-based Network"]().The specific details of the framework are as follows.
+This an official Pytorch implementation of our paper ["Hyperspectral and LiDAR Classification via Frequency Domain-based Network"](https://ieeexplore.ieee.org/document/10614647). The specific details of the framework are as follows.
 ![FDNet](./figure/FDNet.png)
 ****
 # Datasets
@@ -29,15 +29,14 @@ All the results presented here are referenced from the original paper.
 # Citation
 If you find this paper useful, please cite:
 ``` 
-@ARTICLE{,
-  author={},
-  journal={}, 
-  title={Hyperspectral and LiDAR Classification via Frequency Domain-based Network}, 
-  year={},
-  volume={},
-  number={},
-  pages={},
-  doi={}
+@ARTICLE{10614647,
+  author={Ni, Kang and Wang, Duo and Zhao, Guofeng and Zheng, Zhizhong and Wang, Peng},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Hyperspectral and LiDAR Classification via Frequency Domain-Based Network},
+  year={2024},
+  volume={62},
+  pages={1-17},
+  doi={10.1109/TGRS.2024.3435793}
 }
 ```
 ****
